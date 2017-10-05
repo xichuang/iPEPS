@@ -1,0 +1,1 @@
+ADD_LIBRARY(iPEPS iPEPS.cc CTM.cc)
