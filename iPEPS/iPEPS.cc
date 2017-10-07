@@ -112,7 +112,7 @@ iPEPS<IQIndex>::iPEPS(const vector<int> & uc, const SiteSet &sites, const int nS
                                  dag(linksG_[sitebond[3]][0]),
                                  sites_.si(i + 1));
         if(i==0) Gtmp *= symTen;
-        scaleTensor(G_[i]);
+        scaleTensor(Gtmp);
         G_.push_back(Gtmp);
     }
 }
