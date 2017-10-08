@@ -75,7 +75,7 @@ iPEPS<IQIndex>::iPEPS(const vector<int> & uc, const SiteSet &sites, const int nS
     isFerm_ = args.getBool("Fermionic",false);
 
     auto symTen = symmtensor(QN());
-    auto symInd_ = symTen.inds().front();
+    symInd_ = symTen.inds().front();
 
     linksG_.clear();
     for (auto i:range(nSite_)) {
@@ -126,6 +126,7 @@ void iPEPS<IndexT>::randomGs()
 
 template<class IndexT>
 void iPEPS<IndexT>::AfromGandLs() {
+
     links_.clear();
     for (auto &I:linksG_)
         links_.push_back(I[1]);

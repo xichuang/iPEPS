@@ -35,13 +35,13 @@ void CTM<IndexT>::AAfromA(TensorT &AA, const TensorT &A, const int site) {
         auto bonds = siteBonds(site, nx_, ny_, unitCell_);
         fSwapGate(barA, links_[bonds[0]], links_[bonds[1]]);
         fSwapGate(barA, links_[bonds[2]], links_[bonds[3]]);
-        barA.primeExcept(dag(symInd_), siteInd);
+        barA.primeExcept(symInd_, siteInd);
         AA = A * barA;
 
         fSwapGate(AA, prime(links_[bonds[0]]), links_[bonds[1]]);
         fSwapGate(AA, links_[bonds[2]], prime(links_[bonds[3]]));
     } else {
-        barA.primeExcept(dag(symInd_), siteInd);
+        barA.primeExcept(dag(symInd_), dag(siteInd));
         AA = A * barA;
     }
     combineBond(AA, site);
@@ -875,6 +875,7 @@ void CTM<IndexT>::fixGauge(const int bond, TensorT &tildeAR, TensorT &tildeBL,
          << " / " << "total egs" << endl;
     cout << minele << " ~~  " << maxele << "  " << minAbs << "  " << elesum << " ,  " << numneg << " / " << tnum
          << endl;
+
     bondenv_ /= maxAbs(D);
     if (elesum < 0.0) {
         cout << "warning!! negetive env" << endl;

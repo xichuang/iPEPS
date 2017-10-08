@@ -87,6 +87,7 @@ int main() {
     if (ntimestep >= maxTimeStep - 1) cout << "Maximun SU time step reached" << endl;
 
     ipeps.AfromGandLs();
+
     CTM_TensorT ctm(uc, ipeps.tensorAs(), ipeps.linkAs(), ipeps.symInd(),
                     nsite, nx, ny, chi);
     ctm.CTMRG();

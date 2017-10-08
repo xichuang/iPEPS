@@ -15,9 +15,9 @@ using CTM_TensorT  = CTM<IndexT>;
 int main() {
     const int nx = 2;
     const int ny = 2;
-    const int nsite=2;
+    const int nsite = 2;
     auto sites = SpinHalf(nsite);
-    int cfg[nx*ny]={0,1,1,0};
+    int cfg[nx * ny] = {0, 1, 1, 0};
     vector<int> uc(cfg, cfg + nx * ny);
 
     int maxTimeStep = 4000;
@@ -79,8 +79,11 @@ int main() {
         if (ntimestep >= maxTimeStep - 1) cout << "Maximun SU time step reached" << endl;
 
         ipeps.AfromGandLs();
+        Print(ipeps.symInd());
         CTM_TensorT ctm(uc, ipeps.tensorAs(), ipeps.linkAs(), ipeps.symInd(),
                         nsite,nx,ny,chi);
+//        ctm.drawEnvBulk("ctm_0",true);
+
         ctm.CTMRG();
 
         vector<Real> mz;

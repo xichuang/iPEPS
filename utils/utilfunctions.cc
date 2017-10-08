@@ -107,9 +107,10 @@ Eigen::MatrixXd toEigen(ITensor T) {
 }
 
 ITensor toITensor(Eigen::MatrixXd mat, IndexSet inds) {
-    int size;
-    for (auto &I:inds)
-        size += I.m();
+    int size=1;
+    for (auto &I:inds) {
+        size *= I.m();
+    }
     assert(size == mat.rows() * mat.cols());
     vector<Real> vec(mat.data(), mat.data() + mat.rows() * mat.cols());
 
@@ -252,6 +253,7 @@ void QRdecomp(const ITensor &A, ITensor &Q, ITensor &R,
 
     auto Atmp = A * Qcomb * Rcomb;
     Atmp.prime(commonIndex(Atmp, Rcomb));
+
     auto Amat = toEigen(Atmp);
 
     auto minInd=min(Amat.rows(),Amat.cols());
@@ -265,6 +267,7 @@ void QRdecomp(const ITensor &A, ITensor &Q, ITensor &R,
 //    Eigen::MatrixXd Qmat = qr.householderQ();
     Eigen::MatrixXd Rmat = qr.matrixQR().topLeftCorner(minInd, Amat.cols()).triangularView<Eigen::Upper>();
 
+
     Index qrlink(iname, minInd, itype);
     if(buildQ) {
         Q = toITensor(Qmat, IndexSet(commonIndex(Atmp, Qcomb), qrlink));
@@ -274,7 +277,7 @@ void QRdecomp(const ITensor &A, ITensor &Q, ITensor &R,
     R.noprime();
     R *= Rcomb;
 
-    if(norm(A - Q * R)> 1.0e-12) cout<<"error in QR decomposition with relative error"
+    if(buildQ&&norm(A - Q * R)> 1.0e-12) cout<<"error in QR decomposition with relative error"
                                      <<norm(A-Q*R)<<endl;
 }
 
@@ -545,8 +548,6 @@ void matInverse(const IQTensor &A, IQTensor & invA)
 
         auto uind = stdx::make_array(B.i1,n);
         auto pU = getBlock(invStore,invIs,uind);
-        assert(pU.data() != nullptr);
-        assert(uI[B.i1].m() == long(nrows(UU)));
         auto Uref = makeMatRef(pU,lind[B.i1].m(),rind[n].m());
         Uref &= invMat;
         ++n;

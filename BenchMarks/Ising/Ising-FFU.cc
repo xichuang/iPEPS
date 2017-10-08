@@ -22,7 +22,7 @@ int main() {
 
     int maxTimeStep = 4000;
     Real tstep = 0.005;
-    int dim = 4;
+    int dim = 3;
     int chi = dim * 10;
 
     fstream mzout, iterout;
@@ -84,6 +84,7 @@ int main() {
     if (ntimestep >= maxTimeStep - 1) cout << "Maximun SU time step reached" << endl;
 
     ipeps.AfromGandLs();
+
     CTM_TensorT ctm(uc, ipeps.tensorAs(), ipeps.linkAs(), ipeps.symInd(),
                     nsite,nx,ny,chi);
     ctm.CTMRG();
